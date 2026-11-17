@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>رفیق چت</title>
+<style>
+body {
+  background:#101827;
+  color:white;
+  font-family:tahoma;
+  text-align:center;
+  padding:25px;
+}
+.box {
+  max-width:450px;
+  margin:50px auto;
+  background:#1c2b42;
+  padding:25px;
+  border-radius:20px;
+}
+input,button {
+  width:90%;
+  padding:15px;
+  margin:10px;
+  border:0;
+  border-radius:10px;
+  font-size:16px;
+}
+button {
+  background:#287cf0;
+  color:white;
+  cursor:pointer;
+}
+h1 {color:#60a5fa}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>🎥 رفیق چت</h1>
+<p>با دوستانت تماس تصویری بگیر!</p>
+
+<input id="name" placeholder="نام شما">
+<input id="room" placeholder="کد اتاق">
+
+<button onclick="createRoom()">ساخت اتاق</button>
+<button onclick="joinRoom()">ورود به تماس تصویری</button>
+<button onclick="copyLink()">کپی لینک دعوت</button>
+
+<p id="msg"></p>
+</div>
+
+<script>
+function createRoom() {
+ const room = "rafiq-" +
+ Math.random().toString(36).substring(2,10);
+ document.getElementById("room").value = room;
+ document.getElementById("msg").innerText =
+ "اتاق ساخته شد! لینک را برای دوستانت بفرست.";
+}
+
+function getLink() {
+ const room = document.getElementById("room").value.trim();
+ if (!room) {
+  alert("کد اتاق را وارد کن");
+  return null;
+ }
+ return "https://meet.jit.si/" + encodeURIComponent(room);
+}
+
+function joinRoom() {
+ const link = getLink();
+ if (!link) return;
+ const name = document.getElementById("name").value.trim();
+ location.href = link + (name ? "#userInfo.displayName=" + encodeURIComponent(name) : "");
+}
+
+async function copyLink() {
+ const link = getLink();
+ if (!link) return;
+ try {
+  await navigator.clipboard.writeText(link);
+  document.getElementById("msg").innerText = "لینک کپی شد!";
+ } catch(e) {
+  document.getElementById("msg").innerText = link;
+ }
+}
+</script>
+</body>
+</html>
